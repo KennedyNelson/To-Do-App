@@ -10,9 +10,9 @@ def home(request):
         form = AddForm(request.POST)
         if form.is_valid():
             activity = form.save(commit=False)
+            activity.save()
             profile.save()
             profile.activities.add(activity)
-            activity.save()
             return redirect('home')
              
     activities = profile.activities.all()
@@ -28,6 +28,7 @@ def delete(request, id):
     user = Profile.objects.get(user=request.user)
     user.activities.remove(item)
     user.save()
+    item.delete()
     context = {
         'activities': user.activities.all(),
         'form': AddForm()
