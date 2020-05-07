@@ -8,20 +8,11 @@ def home(request):
     profile = Profile.objects.get(user=request.user)
     if request.method == "POST":
         form = AddForm(request.POST)
-        profile.save()
         if form.is_valid():
             activity = form.save(commit=False)
-            if Activity.objects.all():
-                for item in Activity.objects.all():
-                    if activity.title == item.title:    
-                        profile.activities.add(item)
-                        break
-                else:
-                    activity.save()
-                    profile.activities.add(activity)
-            else:
-                activity.save()
-                profile.activities.add(activity)
+            profile.save()
+            profile.activities.add(activity)
+            activity.save()
             return redirect('home')
              
     activities = profile.activities.all()
